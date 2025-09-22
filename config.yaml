@@ -1,0 +1,40 @@
+# Choose ONE input method:
+
+# Method A: Bruker .bcf hypermap (requires hyperspy)
+#bruker_path: "./data/example.bcf"
+
+# Method B: Pre-exported maps + SEM image
+maps_dir: "./data/maps"                    # contains C.png, O.png, Ca.png, Si.png, ... (or .npy/.tif)
+sem_path:  "./data/sem_image.tif"
+
+elements: ["C", "O", "Ca", "Si"]
+
+preprocess:
+  clip_percent: [1, 99]
+  denoise: bilateral       # bilateral | tv | null
+  bilateral_sigma_color: 0.05
+  bilateral_sigma_spatial: 2
+  tv_weight: 0.05
+
+mask_rules:
+  C:  {method: percentile, p: 90}
+  O:  {method: percentile, p: 90}
+  Ca: {method: percentile, p: 92}
+  Si: {method: percentile, p: 85}
+
+co_location:
+  include: ["Ca", "O"]
+  exclude: ["Si"]
+
+ratio_windows:
+  "Ca/Si": [2.0, 5.0]
+  "Ca/O":  [0.05, 1.0]
+  # "Si/O":  [0.05, 0.50]
+
+overlay:
+  color_rgb: [1.0, 0.0, 0.0]
+  alpha: 0.35
+
+save_dir: "./edx_outputs"
+save_prefix: "phase_detect"
+sums_chart: true
